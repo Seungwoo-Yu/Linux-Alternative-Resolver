@@ -24,7 +24,7 @@ pub struct LinkItem {
        For Fedora, Redhat and SUSE distros
     **/
     pub family: Option<String>,
-    pub priority: isize,
+    pub priority: i32,
     /**
        Contains [LinkPath].
        First item of this vector is always master path and the rest are slave path.
