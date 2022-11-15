@@ -1,0 +1,8 @@
+[workspace]
+members = [
+    "core",
+    "dedicated_test"
+]
+
+[profile.release]
+strip = true # Strip symbols from binary for non-Windows distributions
