@@ -1,8 +1,8 @@
-use linux_alternative_resolver_core::alternative_resolver::AlternativeResolver;
-use linux_alternative_resolver_core::models::link_group::LinkGroup;
-use linux_alternative_resolver_core::models::link_item::LinkItem;
-use linux_alternative_resolver_core::models::link_path::LinkPath;
-use linux_alternative_resolver_core::traits::alt_config_persistence::AltConfigPersistence;
+use linux_alternative_resolver::alternative_resolver::AlternativeResolver;
+use linux_alternative_resolver::models::link_group::LinkGroup;
+use linux_alternative_resolver::models::link_item::LinkItem;
+use linux_alternative_resolver::models::link_path::LinkPath;
+use linux_alternative_resolver::traits::alt_config_persistence::AltConfigPersistence;
 
 #[test]
 fn test1() {
@@ -50,6 +50,6 @@ fn test1() {
         items: vec![],
     });
 
-    assert!(resolver.update(&config).is_ok(), false);
+    assert_eq!(resolver.update(&config).is_ok(), false);
     println!("error while updating Alternative");
 }
