@@ -158,7 +158,10 @@ fn convert_strings_to_alt_config(
             Some(value) => value,
         };
         let mut link_group = LinkGroup {
-            name: match format!("{}", (&master_path).to_string()).split('/').last() {
+            name: match (&master_path).to_string()
+                .split('/')
+                .last()
+                .or(Some(&master_path)) {
                 None => {
                     return Err(IOParseAlternativeResolveError::AlternativeResolveError(
                         AlternativeResolveError {
