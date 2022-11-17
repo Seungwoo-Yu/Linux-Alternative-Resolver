@@ -2,7 +2,6 @@ use std::{fs, io};
 
 pub mod alternative_resolver;
 pub mod impls;
-pub mod models;
 pub mod traits;
 
 pub(in crate) const POSSIBLE_PATHS: [&str; 4] = [

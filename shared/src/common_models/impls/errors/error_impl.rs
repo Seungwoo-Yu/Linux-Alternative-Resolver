@@ -1,4 +1,4 @@
-use crate::models::errors::error::{AlternativeResolveError, Type};
+use crate::common_models::models::errors::error::{AlternativeResolveError, Type};
 use std::error::Error;
 use std::fmt;
 use std::fmt::Formatter;

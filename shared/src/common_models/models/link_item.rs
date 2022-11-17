@@ -1,9 +1,10 @@
-use crate::models::link_path::LinkPath;
+use indexmap::IndexSet;
+use crate::common_models::models::link_path::LinkPath;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "serde")]
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LinkItem {
     /**
        For Fedora, Redhat and SUSE distros
@@ -14,11 +15,11 @@ pub struct LinkItem {
        Contains [LinkPath].
        First item of this vector is always master path and the rest are slave path.
     **/
-    pub paths: Vec<LinkPath>,
+    pub paths: IndexSet<LinkPath>,
 }
 
 #[cfg(not(feature = "serde"))]
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Eq)]
 pub struct LinkItem {
     /**
        For Fedora, Redhat and SUSE distros
@@ -29,5 +30,5 @@ pub struct LinkItem {
        Contains [LinkPath].
        First item of this vector is always master path and the rest are slave path.
     **/
-    pub paths: Vec<LinkPath>,
+    pub paths: IndexSet<LinkPath>,
 }

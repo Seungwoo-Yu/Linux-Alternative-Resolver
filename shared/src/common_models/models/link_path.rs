@@ -2,7 +2,7 @@
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "serde")]
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct LinkPath {
     pub name: String,
     pub target_path: String,
@@ -10,7 +10,7 @@ pub struct LinkPath {
 }
 
 #[cfg(not(feature = "serde"))]
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Eq, Hash)]
 pub struct LinkPath {
     pub name: String,
     pub target_path: String,

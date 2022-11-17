@@ -1,5 +1,5 @@
 use std::error::Error;
-use crate::models::errors::error_combo::IOParseAlternativeResolveError;
+use crate::common_models::models::errors::error_combo::IOParseAlternativeResolveError;
 use std::fmt;
 use std::fmt::Formatter;
 

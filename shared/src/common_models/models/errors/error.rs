@@ -6,6 +6,10 @@ pub enum Type {
     TargetPathNotRecognized,
     ExecutionPathNotRecognized,
     FamilyPriorityNotRecognized,
+    MasterPathNotFound,
+    SlavePathNotFound,
+    DifferentMasterPathWithName,
+    EmptyItemListInGroup,
 }
 
 #[derive(Debug)]

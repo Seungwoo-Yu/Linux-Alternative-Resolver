@@ -1,8 +1,8 @@
-use crate::models::alt_config::AltConfig;
-use crate::models::link_group::LinkGroup;
-use crate::models::link_item::LinkItem;
-use crate::traits::link_group_search::LinkGroupSearch;
-use crate::traits::link_item_search::LinkItemSearch;
+use crate::common_models::models::alt_config::AltConfig;
+use crate::common_models::models::link_group::LinkGroup;
+use crate::common_models::models::link_item::LinkItem;
+use crate::common_models::traits::link_group_search::LinkGroupSearch;
+use crate::common_models::traits::link_item_search::LinkItemSearch;
 
 impl LinkGroupSearch for AltConfig {
     fn find_group_by_name<'t>(&'t self, name: &'t String) -> Option<&'t LinkGroup> {

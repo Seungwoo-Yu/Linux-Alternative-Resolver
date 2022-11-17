@@ -1,14 +1,14 @@
 use crate::alternative_resolver::AlternativeResolver;
-use crate::models::alt_config::AltConfig;
-use crate::models::errors::error::AlternativeResolveError;
-use crate::models::errors::error::Type::{
+use linux_alternative_resolver_shared::common_models::models::alt_config::AltConfig;
+use linux_alternative_resolver_shared::common_models::models::errors::error::AlternativeResolveError;
+use linux_alternative_resolver_shared::common_models::models::errors::error::Type::{
     ExecutionPathNotRecognized, FamilyPriorityNotRecognized, FirstEmptyLineNotRecognized,
     MasterPathNotRecognized, NoAvailableAltPath, TargetPathNotRecognized,
 };
-use crate::models::errors::error_combo::IOParseAlternativeResolveError;
-use crate::models::link_group::LinkGroup;
-use crate::models::link_item::LinkItem;
-use crate::models::link_path::LinkPath;
+use linux_alternative_resolver_shared::common_models::models::errors::error_combo::IOParseAlternativeResolveError;
+use linux_alternative_resolver_shared::common_models::models::link_group::LinkGroup;
+use linux_alternative_resolver_shared::common_models::models::link_item::LinkItem;
+use linux_alternative_resolver_shared::common_models::models::link_path::LinkPath;
 use crate::traits::alt_config_persistence::AltConfigPersistence;
 use crate::{is_os_like, POSSIBLE_PATHS};
 use indexmap::{IndexMap, IndexSet};
@@ -129,11 +129,11 @@ fn flatten_read_dir(path: &PathBuf) -> Result<Vec<PathBuf>, io::Error> {
     Ok(result)
 }
 
-fn convert_strings_to_alt_config(
+pub fn convert_strings_to_alt_config(
     data: &Vec<String>,
 ) -> Result<AltConfig, IOParseAlternativeResolveError> {
     let mut result = AltConfig {
-        alternatives: vec![],
+        alternatives: IndexSet::default(),
     };
 
     for value in data.iter() {
@@ -173,7 +173,7 @@ fn convert_strings_to_alt_config(
             }
                 .to_string(),
             selected: None,
-            items: vec![],
+            items: IndexSet::default(),
         };
 
         // Find where slaves' data (or master's data in case of there is none but master only) ends
@@ -209,12 +209,7 @@ fn convert_strings_to_alt_config(
                 .map(|value| (*value).to_string());
             let value = (&lines)
                 .get(3 + value * 2)
-                .map(|value| {
-                    (*value)
-                        .rsplit_once("/")
-                        .map(|(_, value)| value.to_string())
-                })
-                .flatten();
+                .map(|value| (*value).to_string());
 
             (&mut targets).insert(
                 match key {
@@ -263,7 +258,7 @@ fn convert_strings_to_alt_config(
 
         // Register LinkItems using iteration of targets
         for value in 0..iteration_count {
-            let mut link_paths: Vec<LinkPath> = vec![];
+            let mut link_paths: IndexSet<LinkPath> = IndexSet::default();
 
             for (index, (name, target_path)) in (&targets).iter().enumerate() {
                 let target_path_pos = match index {
@@ -300,7 +295,7 @@ fn convert_strings_to_alt_config(
 
                 match !(&execution_path).eq("") {
                     true => {
-                        (&mut link_paths).push(LinkPath {
+                        (&mut link_paths).insert(LinkPath {
                             name: name.to_string(),
                             target_path: target_path.to_string(),
                             alternative_path: execution_path,
@@ -333,12 +328,16 @@ fn convert_strings_to_alt_config(
                 Some(value) => value,
             };
             let family_priority: Vec<&str> = family_priority_line.split("@").skip(1).collect();
-            let family = match (&family_priority).get(0) {
+            let _family = match (&family_priority).get(0) {
                 None => "",
                 Some(value) => match is_os_like("fedora".to_string()).unwrap_or(false) {
                     true => *value,
                     false => "",
                 },
+            };
+            let family = match _family.eq("") {
+                true => None,
+                false => Some(_family.to_string())
             };
             let _priority = match (&family_priority).len() {
                 0 => &family_priority_line,
@@ -357,8 +356,8 @@ fn convert_strings_to_alt_config(
                 }
             };
 
-            (&mut link_group).items.push(LinkItem {
-                family: Some(family.to_string()),
+            (&mut link_group).items.insert(LinkItem {
+                family,
                 priority,
                 paths: link_paths,
             });
@@ -389,13 +388,13 @@ fn convert_strings_to_alt_config(
             (&mut link_group).selected = Some(converted as isize);
         }
 
-        (&mut result).alternatives.push(link_group);
+        (&mut result).alternatives.insert(link_group);
     }
 
     Ok(result)
 }
 
-fn convert_alt_config_to_hashmap(
+pub fn convert_alt_config_to_hashmap(
     config: &AltConfig,
 ) -> Result<IndexMap<String, String>, IOParseAlternativeResolveError> {
     let mut result: IndexMap<String, String> = IndexMap::new();
@@ -415,13 +414,11 @@ fn convert_alt_config_to_hashmap(
         }
 
         // Second line must be path of master
-        let master_path = match group
-            .items
-            .get(0)
+        let master_path = match group.items.iter()
+            .nth(0)
             .map(|value| {
-                value
-                    .paths
-                    .get(0)
+                value.paths.iter()
+                    .nth(0)
                     .map(|value| value.target_path.to_string())
             })
             .flatten()
@@ -464,7 +461,7 @@ fn convert_alt_config_to_hashmap(
         (&mut file_lines).push(format!(""));
 
         for item in group.items.iter() {
-            let master_path = match item.paths.get(0) {
+            let master_path = match item.paths.get_index(0) {
                 None => {
                     return Err(IOParseAlternativeResolveError::AlternativeResolveError(
                         AlternativeResolveError {
@@ -486,7 +483,7 @@ fn convert_alt_config_to_hashmap(
                     continue;
                 }
 
-                match item.paths.get(index - 1) {
+                match item.paths.get_index(index - 1) {
                     None => {
                         (&mut file_lines).push(format!(""));
                     }

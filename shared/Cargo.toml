@@ -1,0 +1,13 @@
+[package]
+name = "linux_alternative_resolver_shared"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde = { optional = true, version = "~1.0.147" }
+indexmap = { version = "~1.9.1", features = ["std"] }
+
+[features]
+serde = ["dep:serde", "indexmap/serde"]
