@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "core",
+    "register",
     "shared",
     "dedicated_test"
 ]
