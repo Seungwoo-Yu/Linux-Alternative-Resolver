@@ -1,8 +1,4 @@
-use linux_alternative_resolver::alternative_resolver::AlternativeResolver;
 use linux_alternative_resolver::impls::alternative_resolver_impl::convert_strings_to_alt_config;
-use linux_alternative_resolver::traits::alt_config_persistence::AltConfigPersistence;
-use linux_alternative_resolver_shared::common_models::models::alt_config::AltConfig;
-use linux_alternative_resolver_shared::common_models::traits::link_item_search::LinkItemSearch;
 
 #[test]
 fn test1() {
@@ -70,7 +66,9 @@ fn test1() {
         "",
     ].join("\n");
 
-    let mut config = convert_strings_to_alt_config(&vec![predefined_data]).unwrap();
+    let config = convert_strings_to_alt_config(&vec![
+        (format!("editor"), predefined_data)
+    ]).unwrap();
     assert_eq!(config.alternatives[0].items[0].paths[0].name, "editor");
     assert_eq!(
         config.alternatives[0].items[2].paths.last().map(| value | &value.alternative_path),

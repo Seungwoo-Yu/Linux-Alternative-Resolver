@@ -19,6 +19,7 @@ fn test1() {
     // Sadly, core doesn't verify paths but only register does
     (&mut new_config).alternatives.insert(LinkGroup {
         name: "lar-test".to_string(),
+        filename: "lar-test".to_string(),
         selected: None,
         items: IndexSet::from([
             LinkItem {
@@ -48,6 +49,7 @@ fn test1() {
     // because there is no items while first link item must be declared and valid in the array!
     new_config.alternatives.insert(LinkGroup {
         name: "this makes error".to_string(),
+        filename: "make_error".to_string(),
         selected: None,
         items: IndexSet::new(),
     });
