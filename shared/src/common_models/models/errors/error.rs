@@ -10,6 +10,7 @@ pub enum Type {
     SlavePathNotFound,
     DifferentMasterPathWithName,
     EmptyItemListInGroup,
+    FilenameNotFound,
 }
 
 #[derive(Debug)]

@@ -1,10 +1,7 @@
 use crate::alternative_resolver::AlternativeResolver;
 use linux_alternative_resolver_shared::common_models::models::alt_config::AltConfig;
 use linux_alternative_resolver_shared::common_models::models::errors::error::AlternativeResolveError;
-use linux_alternative_resolver_shared::common_models::models::errors::error::Type::{
-    ExecutionPathNotRecognized, FamilyPriorityNotRecognized, FirstEmptyLineNotRecognized,
-    MasterPathNotRecognized, NoAvailableAltPath, TargetPathNotRecognized,
-};
+use linux_alternative_resolver_shared::common_models::models::errors::error::Type::{ExecutionPathNotRecognized, FamilyPriorityNotRecognized, FirstEmptyLineNotRecognized, MasterPathNotRecognized, NoAvailableAltPath, FilenameNotFound, TargetPathNotRecognized};
 use linux_alternative_resolver_shared::common_models::models::errors::error_combo::IOParseAlternativeResolveError;
 use linux_alternative_resolver_shared::common_models::models::link_group::LinkGroup;
 use linux_alternative_resolver_shared::common_models::models::link_item::LinkItem;
@@ -63,8 +60,30 @@ impl AltConfigPersistence for AlternativeResolver {
                 ));
             }
         };
+        let mut copied = AltConfig { alternatives: IndexSet::new() };
 
-        let config_map = match convert_alt_config_to_hashmap(config) {
+        for value in config.alternatives.iter() {
+            if value.items.len() == 0 {
+                if value.filename.is_empty() {
+                    return Err(
+                        IOParseAlternativeResolveError::AlternativeResolveError(
+                            AlternativeResolveError { error_type: FilenameNotFound }
+                        )
+                    );
+                }
+
+                self.remove_file(&value.filename)?;
+                continue;
+            }
+
+            (&mut copied).alternatives.insert(value.clone());
+        }
+
+        if (&copied).alternatives.len() == 0 {
+            return Ok(());
+        }
+
+        let config_map = match convert_alt_config_to_hashmap(&copied) {
             Ok(value) => value,
             Err(error) => {
                 return Err(error);
