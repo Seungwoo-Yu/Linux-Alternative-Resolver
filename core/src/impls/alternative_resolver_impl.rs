@@ -494,7 +494,7 @@ pub fn convert_alt_config_to_hashmap(
             }
         }
 
-        if (&file_lines).len() == 0 || (&file_lines).last().unwrap().eq("") {
+        if (&file_lines).len() == 0 || !(&file_lines).last().unwrap().eq("") {
             (&mut file_lines).push(format!(""));
         }
 
