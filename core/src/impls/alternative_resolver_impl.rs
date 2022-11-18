@@ -82,6 +82,26 @@ impl AltConfigPersistence for AlternativeResolver {
 
         Ok(())
     }
+
+    fn remove_file(&self, filename: &String) -> Result<(), IOParseAlternativeResolveError> {
+        let alt_path = match available_alt_path() {
+            Ok(value) => value,
+            Err(error) => {
+                return Err(IOParseAlternativeResolveError::AlternativeResolveError(
+                    error,
+                ));
+            }
+        };
+
+        match fs::remove_file((&alt_path).join(filename)) {
+            Ok(_) => {},
+            Err(error) => {
+                return Err(IOParseAlternativeResolveError::IOError(error));
+            }
+        }
+
+        Ok(())
+    }
 }
 
 fn available_alt_path() -> Result<PathBuf, AlternativeResolveError> {
