@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LinkGroup {
     pub name: String,
+    pub filename: String,
     pub selected: Option<isize>,
     pub items: IndexSet<LinkItem>,
 }
@@ -15,6 +16,7 @@ pub struct LinkGroup {
 #[derive(Clone, PartialEq, Eq)]
 pub struct LinkGroup {
     pub name: String,
+    pub filename: String,
     pub selected: Option<isize>,
     pub items: IndexSet<LinkItem>,
 }
