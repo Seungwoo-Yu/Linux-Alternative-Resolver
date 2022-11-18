@@ -35,9 +35,14 @@ impl AltConfigPersistence for AlternativeResolver {
             }
         };
 
-        let _child_raw_strings: Result<Vec<String>, io::Error> = child_paths
+        let _child_raw_strings: Result<Vec<(String, String)>, io::Error> = child_paths
             .iter()
-            .map(|value| fs::read_to_string(value))
+            .map(|value| {
+                Ok((
+                    value.file_name().unwrap().to_string_lossy().to_string(),
+                    fs::read_to_string(value)?
+                ))
+            })
             .collect();
         let child_raw_strings = match _child_raw_strings {
             Ok(value) => value,
@@ -130,13 +135,13 @@ fn flatten_read_dir(path: &PathBuf) -> Result<Vec<PathBuf>, io::Error> {
 }
 
 pub fn convert_strings_to_alt_config(
-    data: &Vec<String>,
+    data: &Vec<(String, String)>,
 ) -> Result<AltConfig, IOParseAlternativeResolveError> {
     let mut result = AltConfig {
         alternatives: IndexSet::default(),
     };
 
-    for value in data.iter() {
+    for (filename, value) in data.iter() {
         let lines: Vec<String> = value.lines().map(|value| value.to_string()).collect();
 
         // First line must be selection data
@@ -170,8 +175,8 @@ pub fn convert_strings_to_alt_config(
                     ))
                 }
                 Some(value) => value,
-            }
-                .to_string(),
+            }.to_string(),
+            filename: filename.to_string(),
             selected: None,
             items: IndexSet::default(),
         };
@@ -400,7 +405,7 @@ pub fn convert_alt_config_to_hashmap(
     let mut result: IndexMap<String, String> = IndexMap::new();
 
     for group in config.alternatives.iter() {
-        let file_name = &group.name;
+        let file_name = &group.filename;
         let mut file_lines: Vec<String> = Vec::new();
 
         // First line must be selection data
