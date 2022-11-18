@@ -40,10 +40,10 @@ fn test1() {
     resolver.update(&new_config).unwrap();
     println!("Alternative updated");
 
+    // Delete group
+    resolver.remove_file(&format!("lar-test")).unwrap();
+    // Don't forget to reflect changes to config
     (&mut new_config).alternatives.pop();
-
-    resolver.update(&new_config).unwrap();
-    println!("Alternative restored");
 
     // This makes error when when it is about ot be updated
     // because there is no items while first link item must be declared and valid in the array!
