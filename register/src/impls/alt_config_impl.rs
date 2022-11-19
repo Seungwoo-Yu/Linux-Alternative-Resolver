@@ -1,23 +1,23 @@
 #![cfg(target_os = "linux")]
 
+use linux_alternative_resolver_shared::common_models::models::alt_config::AltConfig;
 use linux_alternative_resolver_shared::common_models::models::errors::error::AlternativeResolveError;
-use linux_alternative_resolver_shared::common_models::models::errors::error::Type::EmptyItemListInGroup;
+use linux_alternative_resolver_shared::common_models::models::errors::error::Type::EmptyGroupListInConfig;
 use linux_alternative_resolver_shared::common_models::models::errors::error_combo::IOParseAlternativeResolveError;
-use linux_alternative_resolver_shared::common_models::models::link_group::LinkGroup;
 use crate::traits::alt_config_register::AltConfigRegister;
-use crate::traits::item_register::ItemRegister;
+use crate::traits::group_register::GroupRegister;
 
-impl AltConfigRegister for LinkGroup {
+impl AltConfigRegister for AltConfig {
     fn register(&self) -> Result<(), IOParseAlternativeResolveError> {
-        if self.items.len() == 0 {
+        if self.alternatives.len() == 0 {
             return Err(
                 IOParseAlternativeResolveError::AlternativeResolveError(
-                    AlternativeResolveError { error_type: EmptyItemListInGroup }
+                    AlternativeResolveError { error_type: EmptyGroupListInConfig }
                 )
             );
         }
 
-        for value in self.items.iter() {
+        for value in self.alternatives.iter() {
             value.register()?;
         }
 
@@ -25,16 +25,16 @@ impl AltConfigRegister for LinkGroup {
     }
 
     fn unregister(&self) -> Result<(), IOParseAlternativeResolveError> {
-        if self.items.len() == 0 {
+        if self.alternatives.len() == 0 {
             return Err(
                 IOParseAlternativeResolveError::AlternativeResolveError(
-                    AlternativeResolveError { error_type: EmptyItemListInGroup }
+                    AlternativeResolveError { error_type: EmptyGroupListInConfig }
                 )
             );
         }
 
-        for value in self.items.iter() {
-            value.register()?;
+        for value in self.alternatives.iter() {
+            value.unregister()?;
         }
 
         Ok(())
