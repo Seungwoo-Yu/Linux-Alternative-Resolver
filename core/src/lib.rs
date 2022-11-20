@@ -24,14 +24,14 @@ pub(in crate) fn is_os_like(name: String) -> Result<bool, io::Error> {
     let data = fs::read_to_string("/etc/os-release")?;
 
     for value in data.lines() {
-        let name_condition = value.find("NAME=\"")
+        let name_condition = value.find("NAME=")
             .map(| value | value == 0)
             .and_then(| value | value.then_some(()));
         match name_condition {
             None => {}
             Some(_) => {
                 let matched_name = value
-                    .replace("NAME=\"", "")
+                    .replace("NAME=", "")
                     .replace("\"", "")
                     .to_lowercase();
 
@@ -41,11 +41,11 @@ pub(in crate) fn is_os_like(name: String) -> Result<bool, io::Error> {
             }
         }
 
-        match value.find("ID_LIKE=\"") {
+        match value.find("ID_LIKE=") {
             None => {}
             Some(_) => {
                 let _matched_ids = value
-                    .replace("ID_LIKE=\"", "")
+                    .replace("ID_LIKE=", "")
                     .replace("\"", "")
                     .to_lowercase();
                 let matched_ids: Vec<&str> = (&_matched_ids).split_whitespace().collect();
