@@ -24,7 +24,10 @@ pub(in crate) fn is_os_like(name: String) -> Result<bool, io::Error> {
     let data = fs::read_to_string("/etc/os-release")?;
 
     for value in data.lines() {
-        match value.find("NAME=\"") {
+        let name_condition = value.find("NAME=\"")
+            .map(| value | value == 0)
+            .and_then(| value | value.then_some(()));
+        match name_condition {
             None => {}
             Some(_) => {
                 let matched_name = value
