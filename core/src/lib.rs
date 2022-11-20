@@ -41,6 +41,21 @@ pub(in crate) fn is_os_like(name: String) -> Result<bool, io::Error> {
             }
         }
 
+        match value.find("ID=") {
+            None => {}
+            Some(_) => {
+                let _matched_ids = value
+                    .replace("ID=", "")
+                    .replace("\"", "")
+                    .to_lowercase();
+                let matched_ids: Vec<&str> = (&_matched_ids).split_whitespace().collect();
+
+                if matched_ids.contains(&lowercase_name.as_str()) {
+                    return Ok(true);
+                }
+            }
+        }
+
         match value.find("ID_LIKE=") {
             None => {}
             Some(_) => {
