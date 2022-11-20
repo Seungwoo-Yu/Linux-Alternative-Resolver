@@ -551,6 +551,9 @@ pub fn convert_alt_config_to_hashmap(
             (&mut file_lines).push(format!(""));
         }
 
+        // Default EOL
+        (&mut file_lines).push(format!(""));
+
         (&mut result).insert(file_name.to_string(), file_lines.join("\n"));
     }
 
