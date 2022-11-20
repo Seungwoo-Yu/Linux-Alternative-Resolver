@@ -538,12 +538,18 @@ pub fn convert_alt_config_to_hashmap(
             }
         }
 
-        if (&file_lines).len() == 0 || !(&file_lines).last().unwrap().eq("") {
+        // EOLs
+        // Debian requires 1 of extra EOL.
+        // Ubuntu requires 2 of extra EOL.
+        // Redhat(tested for Rocky Linux) and Other distros seem to require none.
+
+        if is_os_like("debian".to_string()).unwrap_or(false) {
             (&mut file_lines).push(format!(""));
         }
 
-        // EOL
-        (&mut file_lines).push(format!(""));
+        if is_os_like("ubuntu".to_string()).unwrap_or(false) {
+            (&mut file_lines).push(format!(""));
+        }
 
         (&mut result).insert(file_name.to_string(), file_lines.join("\n"));
     }
