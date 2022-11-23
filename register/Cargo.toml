@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 linux_alternative_resolver_shared = { path = "../shared" }
-serde_json = { version = "~1.0.87" }
+serde_json = { version = "~1.0.89" }
 indexmap = { version = "~1.9.1", features = ["std"] }
