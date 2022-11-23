@@ -8,7 +8,7 @@ edition = "2021"
 [dependencies]
 linux_alternative_resolver_shared = { path = "../shared" }
 serde = { version = "~1.0.147", optional = true, features = ["derive"] }
-indexmap = { version = "~1.9.1", optional = false, features = ["std"] }
+indexmap = { version = "~1.9.2", optional = false, features = ["std"] }
 
 [features]
 serde = ["dep:serde", "indexmap/serde"]
