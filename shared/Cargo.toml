@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 serde = { optional = true, version = "~1.0.147" }
-indexmap = { version = "~1.9.1", features = ["std"] }
+indexmap = { version = "~1.9.2", features = ["std"] }
 
 [features]
 serde = ["dep:serde", "indexmap/serde"]
