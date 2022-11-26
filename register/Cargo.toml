@@ -1,7 +1,10 @@
 [package]
 name = "linux_alternative_resolver_register"
+authors = ["Seungwoo Yu <seungwoyu2000@gmail.com>"]
+license = "Apache-2.0"
 version = "0.1.0"
 edition = "2021"
+publish = true
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
