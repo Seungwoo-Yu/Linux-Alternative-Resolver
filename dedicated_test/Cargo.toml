@@ -1,7 +1,10 @@
 [package]
 name = "linux_alternative_resolver_test"
+authors = ["Seungwoo Yu <seungwoyu2000@gmail.com>"]
+license = "Apache-2.0"
 version = "0.1.0"
 edition = "2021"
+publish = true
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -10,5 +13,4 @@ serde = { version = "~1.0.147" }
 serde_json = "1.0.89"
 indexmap = { version = "~1.9.2", optional = false, features = ["std"] }
 linux_alternative_resolver = { path = "../core", features = ["serde"] }
-linux_alternative_resolver_shared = { path = "../shared", features = ["serde"] }
 linux_alternative_resolver_register = { path = "../register" }
