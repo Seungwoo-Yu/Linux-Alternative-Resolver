@@ -10,7 +10,7 @@ publish = true
 
 [dependencies]
 linux_alternative_resolver_shared = { path = "../shared" }
-serde = { version = "~1.0.147", optional = true, features = ["derive"] }
+serde = { version = "~1.0.148", optional = true, features = ["derive"] }
 indexmap = { version = "~1.9.2", optional = false, features = ["std"] }
 
 [features]
