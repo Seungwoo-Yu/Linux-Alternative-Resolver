@@ -10,7 +10,7 @@ publish = true
 
 [dependencies]
 serde = { version = "~1.0.149" }
-serde_json = "1.0.89"
+serde_json = "1.0.91"
 indexmap = { version = "~1.9.2", optional = false, features = ["std"] }
 linux_alternative_resolver = { path = "../core", features = ["serde"] }
 linux_alternative_resolver_register = { path = "../register" }
