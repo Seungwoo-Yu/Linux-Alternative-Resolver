@@ -11,7 +11,7 @@ publish = true
 [dependencies]
 linux_alternative_resolver_shared = { path = "../shared" }
 serde = { version = "~1.0.152", optional = true, features = ["derive"] }
-indexmap = { version = "~1.9.2", optional = false, features = ["std"] }
+indexmap = { version = "~2.6.0", optional = false, features = ["std"] }
 
 [features]
 serde = ["dep:serde", "indexmap/serde", "linux_alternative_resolver_shared/serde"]
