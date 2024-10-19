@@ -10,5 +10,5 @@ publish = true
 
 [dependencies]
 linux_alternative_resolver_shared = { path = "../shared" }
-serde_json = { version = "~1.0.91" }
+serde_json = { version = "~1.0.132" }
 indexmap = { version = "~1.9.2", features = ["std"] }
